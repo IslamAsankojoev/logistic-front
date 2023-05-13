@@ -2,6 +2,7 @@ import { Box, Button, Card, Grid, Stack, Typography } from '@mui/material';
 import React, { FC, useState } from 'react';
 import { animated } from 'react-spring';
 import DialogForm from './DialogForm';
+import { currency } from '@/constants';
 
 const OrderItem: FC<{
   order: IOrder;
@@ -55,6 +56,10 @@ const OrderItem: FC<{
                 </Typography>
                 <Typography>
                   <b>Дата доставки</b> - {new Date(order.date_end as any).toDateString()}
+                </Typography>
+
+                <Typography>
+                  <b>Сумма</b> - {order?.total_price + ' ' + currency || ''}
                 </Typography>
                 <Typography>
                   <b>Статус</b> -{' '}

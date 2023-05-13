@@ -16,15 +16,11 @@ import { useRouter } from 'next/router';
 
 const pages = [
   {
-    name: 'Главная',
-    href: '/',
-  },
-  {
     name: 'Типы товаров',
     href: '/product-types',
   },
   {
-    name: 'Отправка товара',
+    name: 'Отправка товаров',
     href: '/deliveries/create',
   },
   {
@@ -104,12 +100,7 @@ function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem
-                  key={page.name}
-                  onClick={() => {
-                    router.push(page.href);
-                  }}
-                >
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
@@ -135,13 +126,11 @@ function Header() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                color="secondary"
-                variant="text"
                 key={page.name}
                 onClick={() => {
                   router.push(page.href);
                 }}
-                sx={{ m: 1, color: 'white', display: 'block', boxShadow: 'none' }}
+                sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page.name}
               </Button>

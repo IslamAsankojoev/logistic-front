@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useTransition, animated } from 'react-spring';
+import { currency } from '@/constants';
 
 const ProductTypes = () => {
   const [parent, enableAnimations] = useAutoAnimate();
@@ -126,7 +127,7 @@ const ProductTypes = () => {
                 width: '90%',
                 padding: '10px',
               }}
-              ref={parent}
+              // ref={parent}
             >
               {!!data?.length &&
                 data?.map((productType: IProduct) => (
@@ -152,7 +153,7 @@ const ProductTypes = () => {
                               <b>Описание</b> - {productType.description}
                             </Typography>
                             <Typography>
-                              <b> Цена</b> - {productType.price}
+                              <b> Цена</b> - {productType.price + ' ' + currency || ''}
                             </Typography>
                           </Grid>
                           <Grid

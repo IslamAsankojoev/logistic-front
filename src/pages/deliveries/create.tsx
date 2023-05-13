@@ -1,7 +1,7 @@
 import { ProductService } from '@/api/product.service';
 import Layout from '@/components/Layout/Layout';
 import { Box, Button, Card, Grid, Stack, TextField, Typography, colors } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
 import AsyncSelect from 'react-select/async';
@@ -10,6 +10,7 @@ import { OrderService } from '@/api/order.service';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import DialogForm from '@/components/DialogForm';
 import OrderItem from '@/components/OrderItem';
+import { currency } from '@/constants';
 
 const CreateDelivery = () => {
   const [parent, enableAnimations] = useAutoAnimate();
@@ -31,6 +32,8 @@ const CreateDelivery = () => {
     },
   });
 
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+
   const [defaultOrder, setDefaultOrder] = React.useState<IOrder>({
     product: {
       name: '',
@@ -49,6 +52,7 @@ const CreateDelivery = () => {
     formState: { errors },
     setValue,
     trigger,
+    getValues,
   } = useForm({
     defaultValues: defaultOrder,
   });
@@ -61,6 +65,11 @@ const CreateDelivery = () => {
     await OrderService.delete(id);
     refetch();
   };
+
+  useEffect(() => {
+    setTotalPrice(Number(getValues()?.product?.price) * Number(getValues()?.quantity));
+    console.log(getValues().quantity);
+  }, [getValues]);
 
   return (
     <Layout>
@@ -178,7 +187,7 @@ const CreateDelivery = () => {
                       { value: 'track', label: 'Камаз' },
                     ]}
                     {...register('status', { required: true })}
-                    placeholder="Выберите адрес"
+                    placeholder="Выберите  метод доставки"
                     onChange={(e) => {
                       setValue('status', e?.value as any);
                       trigger('status');
@@ -192,10 +201,28 @@ const CreateDelivery = () => {
                   label="Вес, кг"
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   {...register('quantity', { required: true })}
+                  onChange={(e) => {
+                    setValue('quantity', e?.target?.value);
+                    trigger('quantity');
+                  }}
                 />
                 <Typography color="error">
                   {errors.quantity && 'Вес обязателен для заполнения'}
                 </Typography>
+                <TextField
+                  value={getValues()?.product?.price}
+                  label="Цена за кг"
+                  sx={{
+                    pointerEvents: 'none',
+                  }}
+                />
+                <TextField
+                  value={Number(getValues()?.product?.price) * Number(getValues()?.quantity)}
+                  label="Сумма"
+                  sx={{
+                    pointerEvents: 'none',
+                  }}
+                />
                 <Button type="submit" variant="contained" size="large">
                   Отправить
                 </Button>
@@ -204,7 +231,49 @@ const CreateDelivery = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={7} lg={7}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2} sx={{}}>
-              <h1>Список товаров</h1>
+              <Box
+                sx={{
+                  width: '80%',
+                }}
+              >
+                <h1
+                  style={{
+                    textAlign: 'center',
+                  }}
+                >
+                  Срок доставки
+                </h1>
+                <Card
+                  sx={{
+                    p: 2,
+                  }}
+                >
+                  <Typography>
+                    {' '}
+                    <b>Казахстан</b>
+                  </Typography>
+                  <Typography>Фура - 3 дня</Typography>
+                  <Typography>Поезд - 2 дня</Typography>
+                  <Typography>Самолет - 1 день</Typography>
+                  <br />
+                  <Typography>
+                    {' '}
+                    <b>Узбекистан</b>
+                  </Typography>
+                  <Typography>Фура - 10 дня</Typography>
+                  <Typography>Поезд - 6 дня</Typography>
+                  <Typography>Самолет - 3 дня</Typography>
+                  <br />
+                  <Typography>
+                    {' '}
+                    <b>Россия</b>
+                  </Typography>
+                  <Typography>Фура - 15 дня</Typography>
+                  <Typography>Поезд - 10 дня</Typography>
+                  <Typography>Самолет - 5 дня</Typography>
+                </Card>
+              </Box>
+              <h1>Список отправок</h1>
 
               <Box
                 display="flex"
@@ -215,7 +284,7 @@ const CreateDelivery = () => {
                   width: '90%',
                   padding: '10px',
                 }}
-                ref={parent}
+                // ref={parent}
               >
                 {!!Orders?.length &&
                   Orders?.map((order: IOrder) => {

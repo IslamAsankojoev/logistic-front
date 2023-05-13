@@ -17,7 +17,7 @@ const Home = () => {
       <Typography variant="h2" fontWeight={600}>
         Логистика
       </Typography>
-      <Typography variant="h6">Добро пожаловать в систему учета логистики</Typography>
+      <Typography variant="h6">Добро пожаловать в систему управления перевозками</Typography>
       <br />
       <br />
       <Button

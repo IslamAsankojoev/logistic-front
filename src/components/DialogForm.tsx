@@ -20,6 +20,7 @@ const DialogForm: FC<{
     handleSubmit,
     formState: { errors },
     setValue,
+    getValues,
     trigger,
   } = useForm({
     defaultValues: {
@@ -61,7 +62,7 @@ const DialogForm: FC<{
             alignItems="center"
             flexDirection="column"
           >
-            <h1>Отправка товара</h1>
+            <h1>Изменить отправку</h1>
             <form
               onSubmit={handleSubmit(submit)}
               style={{
@@ -178,7 +179,7 @@ const DialogForm: FC<{
                     { value: 'track', label: 'Камаз' },
                   ]}
                   {...register('status', { required: true })}
-                  placeholder="Выберите адрес"
+                  placeholder="Выберите метод доставки"
                   onChange={(e) => {
                     setValue('status', e?.value as any);
                     trigger('status');
@@ -192,10 +193,28 @@ const DialogForm: FC<{
                 label="Вес, кг"
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                 {...register('quantity', { required: true })}
+                onChange={(e) => {
+                  setValue('quantity', Number(e?.target?.value));
+                  trigger('quantity');
+                }}
               />
               <Typography color="error">
                 {errors.quantity && 'Вес обязателен для заполнения'}
               </Typography>
+              <TextField
+                value={getValues()?.product?.price}
+                label="Цена за кг"
+                sx={{
+                  pointerEvents: 'none',
+                }}
+              />
+              <TextField
+                value={Number(getValues()?.product?.price) * Number(getValues()?.quantity)}
+                label="Сумма"
+                sx={{
+                  pointerEvents: 'none',
+                }}
+              />
               <Button type="submit" variant="contained" size="large">
                 Изменить
               </Button>

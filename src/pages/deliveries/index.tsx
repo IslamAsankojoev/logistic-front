@@ -4,6 +4,7 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { useQuery } from 'react-query';
 import { OrderService } from '@/api/order.service';
 import Layout from '@/components/Layout/Layout';
+import { currency } from '@/constants';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -25,12 +26,16 @@ const columns: GridColDef[] = [
   {
     field: 'quantity',
     headerName: 'Вес, кг',
-    type: 'number',
     width: 150,
   },
   {
     field: 'product',
     headerName: 'Товар',
+    width: 150,
+  },
+  {
+    field: 'total_price',
+    headerName: 'Сумма',
     width: 150,
   },
   {
@@ -53,6 +58,14 @@ export default function Deliveries() {
         product: order.product.name,
         date: new Date(order.date).toLocaleDateString(),
         date_end: new Date(order.date_end).toLocaleDateString(),
+        status: order?.status === 'avia' ? 'Авиа' : order?.status === 'train' ? 'Авто' : 'Камаз',
+        address_type:
+          order?.address_type === 'kz'
+            ? 'Казахстан'
+            : order?.address_type === 'ru'
+            ? 'Россия'
+            : 'Узбекистан',
+        total_price: order?.total_price + ' ' + currency || '',
       })),
   });
 
@@ -81,7 +94,9 @@ export default function Deliveries() {
           }}
           initialState={{
             pagination: {
-              paginationModel: {},
+              paginationModel: {
+                pageSize: 10,
+              },
             },
           }}
           pageSizeOptions={[5]}
