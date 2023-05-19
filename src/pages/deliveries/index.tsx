@@ -11,32 +11,32 @@ const columns: GridColDef[] = [
   {
     field: 'phone_number',
     headerName: 'Номер телефона',
-    width: 150,
+    width: 130,
   },
   {
     field: 'address_type',
     headerName: 'Адрес',
-    width: 150,
+    width: 100,
   },
   {
     field: 'status',
     headerName: 'Метод доставки',
-    width: 150,
+    width: 200,
   },
   {
     field: 'quantity',
     headerName: 'Вес, кг',
-    width: 150,
+    width: 100,
   },
   {
     field: 'product',
     headerName: 'Товар',
-    width: 150,
+    width: 100,
   },
   {
     field: 'total_price',
     headerName: 'Сумма',
-    width: 150,
+    width: 100,
   },
   {
     field: 'date',
@@ -58,7 +58,12 @@ export default function Deliveries() {
         product: order.product.name,
         date: new Date(order.date).toLocaleDateString(),
         date_end: new Date(order.date_end).toLocaleDateString(),
-        status: order?.status === 'avia' ? 'Авиа' : order?.status === 'train' ? 'Авто' : 'Камаз',
+        status:
+          order?.status === 'avia'
+            ? 'Отправка самолетом'
+            : order?.status === 'train'
+            ? 'Отправка поездом'
+            : 'Отправка фурой',
         address_type:
           order?.address_type === 'kz'
             ? 'Казахстан'

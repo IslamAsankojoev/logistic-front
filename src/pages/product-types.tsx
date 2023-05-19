@@ -4,23 +4,11 @@ import { Box, Button, Card, Grid, Stack, TextField, Typography } from '@mui/mate
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from 'react-query';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { useTransition, animated } from 'react-spring';
 import { currency } from '@/constants';
 
 const ProductTypes = () => {
-  const [parent, enableAnimations] = useAutoAnimate();
-  // enableAnimations(true);
-
   const { data, refetch } = useQuery('productTypes', ProductService.find, {
     select: ({ data }: { data: IProduct[] }) => data.reverse(),
-  });
-
-  const transitions = useTransition(data, {
-    from: { opacity: 0, height: 0 },
-    enter: { opacity: 1, height: 60 },
-    leave: { opacity: 0, height: 0 },
-    config: { duration: 200 },
   });
 
   const {
@@ -40,7 +28,6 @@ const ProductTypes = () => {
   };
 
   const handleProductTypeDelete = async (id: number) => {
-    // enableAnimations(false);
     await ProductService.delete(id);
     refetch();
   };
@@ -131,58 +118,52 @@ const ProductTypes = () => {
             >
               {!!data?.length &&
                 data?.map((productType: IProduct) => (
-                  <animated.div
+                  <Card
                     key={productType.id}
-                    style={{
+                    sx={{
+                      padding: '1rem',
                       width: '100%',
                     }}
                   >
-                    <Card
-                      sx={{
-                        padding: '1rem',
-                        width: '100%',
-                      }}
-                    >
-                      <Stack direction="column" gap={1}>
-                        <Grid container>
-                          <Grid item xs={8}>
-                            <Typography>
-                              <b>Название</b> - {productType.name}
-                            </Typography>
-                            <Typography>
-                              <b>Описание</b> - {productType.description}
-                            </Typography>
-                            <Typography>
-                              <b> Цена</b> - {productType.price + ' ' + currency || ''}
-                            </Typography>
-                          </Grid>
-                          <Grid
-                            item
-                            xs={4}
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="flex-end"
-                          >
-                            <Button
-                              onClick={() => {
-                                handleProductTypeDelete(productType?.id as any);
-                              }}
-                              variant="contained"
-                              color="error"
-                              sx={{
-                                '&:hover': {
-                                  boxShadow: 'none',
-                                },
-                                boxShadow: 'none',
-                              }}
-                            >
-                              Удалить
-                            </Button>
-                          </Grid>
+                    <Stack direction="column" gap={1}>
+                      <Grid container>
+                        <Grid item xs={8}>
+                          <Typography>
+                            <b>Название</b> - {productType.name}
+                          </Typography>
+                          <Typography>
+                            <b>Описание</b> - {productType.description}
+                          </Typography>
+                          <Typography>
+                            <b> Цена</b> - {productType.price + ' ' + currency || ''}
+                          </Typography>
                         </Grid>
-                      </Stack>
-                    </Card>
-                  </animated.div>
+                        <Grid
+                          item
+                          xs={4}
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="flex-end"
+                        >
+                          <Button
+                            onClick={() => {
+                              handleProductTypeDelete(productType?.id as any);
+                            }}
+                            variant="contained"
+                            color="error"
+                            sx={{
+                              '&:hover': {
+                                boxShadow: 'none',
+                              },
+                              boxShadow: 'none',
+                            }}
+                          >
+                            Удалить
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Stack>
+                  </Card>
                 ))}
             </Box>
           </Box>

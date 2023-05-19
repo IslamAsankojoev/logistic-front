@@ -182,9 +182,9 @@ const CreateDelivery = () => {
                       }),
                     }}
                     options={[
-                      { value: 'avia', label: 'Авиа' },
-                      { value: 'train', label: 'Авто' },
-                      { value: 'track', label: 'Камаз' },
+                      { value: 'avia', label: 'Отправка самолетом' },
+                      { value: 'train', label: 'Отправка поездом' },
+                      { value: 'track', label: 'Отправка фурой' },
                     ]}
                     {...register('status', { required: true })}
                     placeholder="Выберите  метод доставки"
